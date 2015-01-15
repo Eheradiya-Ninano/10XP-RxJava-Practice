@@ -1,4 +1,4 @@
-package com.jeremy.rxjava.practice.common;
+package com.jeremy.rxjava.practice.transforming.data;
 
 import rx.Observable;
 import rx.functions.Action1;

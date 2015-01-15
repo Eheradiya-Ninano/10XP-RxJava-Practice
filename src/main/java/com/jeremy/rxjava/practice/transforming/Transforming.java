@@ -1,15 +1,16 @@
 package com.jeremy.rxjava.practice.transforming;
 
-import com.jeremy.rxjava.practice.common.People;
-import com.jeremy.rxjava.practice.common.PeopleGenerator;
-import com.jeremy.rxjava.practice.common.Place;
-import com.jeremy.rxjava.practice.common.PlaceGenerator;
+import java.util.List;
+
 import rx.Observable;
 import rx.functions.Action1;
 import rx.functions.Func1;
 import rx.functions.Func2;
 
-import java.util.List;
+import com.jeremy.rxjava.practice.transforming.data.People;
+import com.jeremy.rxjava.practice.transforming.data.PeopleGenerator;
+import com.jeremy.rxjava.practice.transforming.data.Place;
+import com.jeremy.rxjava.practice.transforming.data.PlaceGenerator;
 
 /**
  * Created by JeremyJeon on 15. 1. 13..

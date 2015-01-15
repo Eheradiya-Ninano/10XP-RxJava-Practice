@@ -1,4 +1,4 @@
-package com.jeremy.rxjava.practice.common;
+package com.jeremy.rxjava.practice.transforming.data;
 
 /**
  * Created by JeremyJeon on 15. 1. 13..

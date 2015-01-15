@@ -1,4 +1,4 @@
-package com.jeremy.rxjava.practice.common;
+package com.jeremy.rxjava.practice.transforming.data;
 
 import java.util.ArrayList;
 import java.util.List;
