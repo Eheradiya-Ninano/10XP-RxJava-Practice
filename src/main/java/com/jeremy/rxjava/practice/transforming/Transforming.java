@@ -26,6 +26,7 @@ public class Transforming {
 
         System.out.println("============ switchMap() practice ============");
 
+        
         List<People> peopleList = PeopleGenerator.getPeopleList();
         Observable.from(peopleList)
                 .filter(new Func1<People, Boolean>() {
