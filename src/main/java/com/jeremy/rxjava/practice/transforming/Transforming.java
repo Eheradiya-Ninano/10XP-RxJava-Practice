@@ -25,7 +25,7 @@ public class Transforming {
     public static void runSwitchMapPractice() {
 
         System.out.println("============ switchMap() practice ============");
-
+        // git 테스트
         
         List<People> peopleList = PeopleGenerator.getPeopleList();
         Observable.from(peopleList)
