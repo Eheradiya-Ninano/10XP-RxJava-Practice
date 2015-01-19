@@ -7,6 +7,7 @@ import rx.Subscriber;
 import rx.functions.Action1;
 import rx.functions.Func1;
 import rx.functions.Func2;
+import rx.observables.ConnectableObservable;
 
 import com.jeremy.rxjava.practice.combining.data.Monkey;
 import com.jeremy.rxjava.practice.combining.data.Person;
@@ -154,6 +155,34 @@ public class Combining {
 		        });
     }
 
-	
+	/**
+     * switchOnNext
+     * # observable에서 정의한 operator의 여러 결과가 비동기적으로 처리되어 결과값으로 넘어온다면 
+     * 그 시점에 여러 값들을 일렬로 세워 종단 operator를 실행한다.
+     * 비동기 처리를 확인해야 하는데, 일단 single thread에서는 별 의미가 없는것 같다... 선수 지식 operator가 필요하다.(buffer, sample 등등..)
+     */
+	public static void switchOnNext(List<Person> persons , List<Monkey> monkeys){
+		
+		System.out.println("============ switchOnNext() practice ============");
+		Observable<Person> p = Observable.from(persons);
+	    Observable<Monkey> m = Observable.from(monkeys);
+
+	    //TODO 둘중 하나가 비동기 operator를 가지고 있어야 한다....
+	    Observable<String>ps = p.map(i->{
+			return i.name; 
+		});
+	    
+	    Observable<String>ms = m.map(i->{
+			return i.nickName; 
+		});
+	    
+	    Observable<Observable<String>>obString = Observable.just(ps, ms);
+	    
+	    //observable을 가지고 있는 observable을 인자로 같는다...
+	    //observable<observable<String>>
+	    Observable.switchOnNext(obString).subscribe(i -> {
+	    	System.out.println("item :: " + i);
+	    });
+    }
 	
 }
