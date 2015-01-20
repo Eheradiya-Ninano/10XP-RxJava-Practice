@@ -27,4 +27,14 @@ public class SubjectRxTest {
         //Then
         Assert.assertTrue(true);
     }
+
+    @Test
+    public void testBehaviorSubject(){
+        //Given
+        //When
+        SubjectRx.behaviorSubject();
+
+        //Then
+        Assert.assertTrue(true);
+    }
 }

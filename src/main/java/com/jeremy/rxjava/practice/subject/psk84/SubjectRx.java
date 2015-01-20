@@ -3,6 +3,7 @@ package com.jeremy.rxjava.practice.subject.psk84;
 import rx.Observable;
 import rx.Subscriber;
 import rx.subjects.AsyncSubject;
+import rx.subjects.BehaviorSubject;
 import rx.subjects.Subject;
 
 import java.util.ArrayList;
@@ -86,5 +87,62 @@ public class SubjectRx {
                 System.out.println("AsyncSubject onNext!!!" + s);
             }
         });
+    }
+
+
+    /**
+     * behaviorSubject
+     *
+     * 최초 추출에 의해 해당 Subject가 실행되며 subscriber호출 시점의 source Observable의 가장 최근 item을 추출 합니다.
+     */
+    public static void behaviorSubject(){
+        System.out.println("=========================behaviorSubject() ========================");
+
+        Subscriber<String> subscriber = new Subscriber<String>() {
+            @Override
+            public void onCompleted() {
+                System.out.println("BehaviorSubject onComplete!!!");
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                System.out.println("BehaviorSubject onError!!!" + e.getMessage());
+            }
+
+            @Override
+            public void onNext(String s) {
+                System.out.println("BehaviorSubject onNext!!!" + s);
+            }
+        };
+
+        BehaviorSubject<String> behaviorSubject = BehaviorSubject.create();
+
+        System.out.println("BehaviorSubject Subscriber 1회!!!");
+        behaviorSubject.subscribe(subscriber);
+
+        System.out.println("BehaviorSubject onNext A!!!");
+        behaviorSubject.onNext("A");
+
+        System.out.println("BehaviorSubject Subscriber 3회!!!");
+        behaviorSubject.subscribe(subscriber);
+        behaviorSubject.subscribe(subscriber);
+        behaviorSubject.subscribe(subscriber);
+
+        System.out.println("BehaviorSubject onNext B/C!!!");
+        behaviorSubject.onNext("B");
+        behaviorSubject.onNext("C");
+
+        System.out.println("BehaviorSubject Subscriber 3회!!!");
+        behaviorSubject.subscribe(subscriber);
+        behaviorSubject.subscribe(subscriber);
+        behaviorSubject.subscribe(subscriber);
+
+        System.out.println("BehaviorSubject onComplete!!!");
+        behaviorSubject.onCompleted();
+
+        System.out.println("BehaviorSubject Subscriber 3회!!!");
+        behaviorSubject.subscribe(subscriber);
+        behaviorSubject.subscribe(subscriber);
+        behaviorSubject.subscribe(subscriber);
     }
 }
