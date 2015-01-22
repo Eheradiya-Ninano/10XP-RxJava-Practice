@@ -1,13 +1,8 @@
 package com.jeremy.rxjava.practice.subject.psk84;
 
-import rx.Observable;
 import rx.Subscriber;
 import rx.subjects.AsyncSubject;
 import rx.subjects.BehaviorSubject;
-import rx.subjects.Subject;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by psk84 on 15. 1. 20..
@@ -28,65 +23,55 @@ public class SubjectRx {
      */
 
 
-    public static void asyncSubjectEmpty(){
-        System.out.println("=========================asyncSubject() / Empty ========================");
-
-        List<String> list = new ArrayList<>();
-
+    public static void asyncSubjectEmpty() throws InterruptedException {
+        System.out.println("=========================asyncSubjectEmpty() / Empty ========================");
 
         AsyncSubject<String> subject = AsyncSubject.create();
 
-        subject.onNext("a");
-        subject.onNext("b");
-        subject.onNext("c");
+        AsyncSubjectThread1 asyncSubjectThread1 = new AsyncSubjectThread1(subject);
+        AsyncSubjectThread2 asyncSubjectThread2 = new AsyncSubjectThread2(subject);
 
-        subject.subscribe(new Subscriber<String>() {
-            @Override
-            public void onCompleted() {
-                System.out.println("AsyncSubjectEmpty onComplete!!!");
-            }
+        asyncSubjectThread1.start();
+        asyncSubjectThread2.start();
 
-            @Override
-            public void onError(Throwable e) {
-                System.out.println("AsyncSubjectEmpty onError!!!" + e.getMessage());
-            }
+        System.out.println("asyncSubjectEmpty onNext A!!!");
+        subject.onNext("A");
 
-            @Override
-            public void onNext(String s) {
-                System.out.println("AsyncSubjectEmpty onNext!!!" + s);
-            }
-        });
+        Thread.sleep(2000);
+        System.out.println("asyncSubjectEmpty onNext B!!!");
+        subject.onNext("B");
+
+        Thread.sleep(2000);
+        System.out.println("asyncSubjectEmpty onNext C!!!");
+        subject.onNext("C");
     }
 
-    public static void asyncSubject(){
+    public static void asyncSubject() throws InterruptedException {
         System.out.println("=========================asyncSubject() ========================");
-
-        List<String> list = new ArrayList<>();
-
 
         AsyncSubject<String> subject = AsyncSubject.create();
 
-        subject.onNext("a");
-        subject.onNext("b");
-        subject.onNext("c");
-        subject.onCompleted();;
+        AsyncSubjectThread1 asyncSubjectThread1 = new AsyncSubjectThread1(subject);
+        AsyncSubjectThread2 asyncSubjectThread2 = new AsyncSubjectThread2(subject);
 
-        subject.subscribe(new Subscriber<String>() {
-            @Override
-            public void onCompleted() {
-                System.out.println("AsyncSubject onComplete!!!");
-            }
+        asyncSubjectThread1.start();
+        asyncSubjectThread2.start();
 
-            @Override
-            public void onError(Throwable e) {
-                System.out.println("AsyncSubject onError!!!" + e.getMessage());
-            }
+        System.out.println("asyncSubject onNext A!!!");
+        subject.onNext("A");
 
-            @Override
-            public void onNext(String s) {
-                System.out.println("AsyncSubject onNext!!!" + s);
-            }
-        });
+        Thread.sleep(2000);
+        System.out.println("asyncSubject onNext B!!!");
+        subject.onNext("B");
+
+        Thread.sleep(2000);
+        System.out.println("asyncSubject onNext C!!!");
+        subject.onNext("C");
+
+        Thread.sleep(2000);
+        System.out.println("asyncSubject onNext Complete!!!");
+        subject.onCompleted();
+
     }
 
 
@@ -95,54 +80,185 @@ public class SubjectRx {
      *
      * 최초 추출에 의해 해당 Subject가 실행되며 subscriber호출 시점의 source Observable의 가장 최근 item을 추출 합니다.
      */
-    public static void behaviorSubject(){
+    public static void behaviorSubject() throws InterruptedException {
         System.out.println("=========================behaviorSubject() ========================");
 
-        Subscriber<String> subscriber = new Subscriber<String>() {
-            @Override
-            public void onCompleted() {
-                System.out.println("BehaviorSubject onComplete!!!");
-            }
 
-            @Override
-            public void onError(Throwable e) {
-                System.out.println("BehaviorSubject onError!!!" + e.getMessage());
-            }
-
-            @Override
-            public void onNext(String s) {
-                System.out.println("BehaviorSubject onNext!!!" + s);
-            }
-        };
 
         BehaviorSubject<String> behaviorSubject = BehaviorSubject.create();
 
-        System.out.println("BehaviorSubject Subscriber 1회!!!");
-        behaviorSubject.subscribe(subscriber);
+        BehaviorSubjectThread1 behaviorSubjectThread1 = new BehaviorSubjectThread1(behaviorSubject);
+        BehaviorSubjectThread2 behaviorSubjectThread2 = new BehaviorSubjectThread2(behaviorSubject);
+        behaviorSubjectThread1.start();
 
+        behaviorSubjectThread2.start();
+
+        Thread.sleep(2000);
         System.out.println("BehaviorSubject onNext A!!!");
         behaviorSubject.onNext("A");
 
-        System.out.println("BehaviorSubject Subscriber 3회!!!");
-        behaviorSubject.subscribe(subscriber);
-        behaviorSubject.subscribe(subscriber);
-        behaviorSubject.subscribe(subscriber);
-
+        Thread.sleep(2000);
         System.out.println("BehaviorSubject onNext B/C!!!");
         behaviorSubject.onNext("B");
         behaviorSubject.onNext("C");
 
-        System.out.println("BehaviorSubject Subscriber 3회!!!");
-        behaviorSubject.subscribe(subscriber);
-        behaviorSubject.subscribe(subscriber);
-        behaviorSubject.subscribe(subscriber);
-
+        Thread.sleep(2000);
         System.out.println("BehaviorSubject onComplete!!!");
         behaviorSubject.onCompleted();
+    }
 
-        System.out.println("BehaviorSubject Subscriber 3회!!!");
-        behaviorSubject.subscribe(subscriber);
-        behaviorSubject.subscribe(subscriber);
-        behaviorSubject.subscribe(subscriber);
+
+
+    static class AsyncSubjectThread1 extends Thread{
+        private AsyncSubject<String> asyncSubject;
+
+        public AsyncSubjectThread1(AsyncSubject<String> asyncSubject){
+            this.asyncSubject = asyncSubject;
+        }
+
+        @Override
+        public void run() {
+
+            while (true){
+                try {
+                    sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+
+                System.out.println("AsyncSubjectThread1 Subscriber!!!");
+                asyncSubject.subscribe(new Subscriber<String>() {
+                    @Override
+                    public void onCompleted() {
+                        System.out.println("AsyncSubjectThread1 onComplete!!!");
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        System.out.println("AsyncSubjectThread1 onError!!!" + e.getMessage());
+                    }
+
+                    @Override
+                    public void onNext(String s) {
+                        System.out.println("AsyncSubjectThread1 onNext!!!" + s);
+                    }
+                });
+            }
+        }
+    }
+
+    static class AsyncSubjectThread2 extends Thread{
+        private AsyncSubject<String> asyncSubject;
+
+        public AsyncSubjectThread2(AsyncSubject<String> asyncSubject){
+            this.asyncSubject = asyncSubject;
+        }
+
+        @Override
+        public void run() {
+
+            while (true){
+
+                try {
+                    sleep(2000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+
+                System.out.println("AsyncSubjectThread2 Subscriber!!!");
+                asyncSubject.subscribe(new Subscriber<String>() {
+                    @Override
+                    public void onCompleted() {
+                        System.out.println("AsyncSubjectThread2 onComplete!!!");
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        System.out.println("AsyncSubjectThread2 onError!!!" + e.getMessage());
+                    }
+
+                    @Override
+                    public void onNext(String s) {
+                        System.out.println("AsyncSubjectThread2 onNext!!!" + s);
+                    }
+                });
+            }
+        }
+    }
+
+
+    static class BehaviorSubjectThread1 extends Thread{
+        private BehaviorSubject<String> behaviorSubject;
+
+        public BehaviorSubjectThread1(BehaviorSubject<String> behaviorSubject){
+            this.behaviorSubject = behaviorSubject;
+        }
+
+        @Override
+        public void run() {
+            while(true){
+                try {
+                    sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+
+                System.out.println("BehaviorSubjectThread1 Subscriber!!!");
+                behaviorSubject.subscribe(new Subscriber<String>() {
+                    @Override
+                    public void onCompleted() {
+                        System.out.println("BehaviorSubjectThread1 onComplete!!!");
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        System.out.println("BehaviorSubjectThread1 onError!!!" + e.getMessage());
+                    }
+
+                    @Override
+                    public void onNext(String s) {
+                        System.out.println("BehaviorSubjectThread1 onNext!!!" + s);
+                    }
+                });
+            }
+        }
+    }
+
+    static class BehaviorSubjectThread2 extends Thread{
+        private BehaviorSubject<String> behaviorSubject;
+
+        public BehaviorSubjectThread2(BehaviorSubject<String> behaviorSubject){
+            this.behaviorSubject = behaviorSubject;
+        }
+
+        @Override
+        public void run() {
+
+            while(true){
+                try {
+                    sleep(2000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+
+                System.out.println("BehaviorSubjectThread2 Subscriber!!!");
+                behaviorSubject.subscribe(new Subscriber<String>() {
+                    @Override
+                    public void onCompleted() {
+                        System.out.println("BehaviorSubjectThread2 onComplete!!!");
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        System.out.println("BehaviorSubjectThread2 onError!!!" + e.getMessage());
+                    }
+
+                    @Override
+                    public void onNext(String s) {
+                        System.out.println("BehaviorSubjectThread2 onNext!!!" + s);
+                    }
+                });
+            }
+        }
     }
 }
