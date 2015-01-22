@@ -12,58 +12,58 @@ public class SubjectTest {
      * AsyncSubject Test Main(Empty)
      * @throws InterruptedException
      */
-    @Test
-    public void testAsyncSubjectEmpty() throws InterruptedException {
-        //Given
-        //When
-        SubjectRx.asyncSubjectEmpty();
-
-        //Then
-        Assert.assertTrue(true);
-    }
+//    @Test
+//    public void testAsyncSubjectEmpty() throws InterruptedException {
+//        //Given
+//        //When
+//        SubjectRx.asyncSubjectEmpty();
+//
+//        //Then
+//        Assert.assertTrue(true);
+//    }
 
     /**
      * AsyncSubject Test Main
      * @throws InterruptedException
      */
-    @Test
-    public void testAsyncSubject() throws InterruptedException {
-        //Given
-        //When
-        SubjectRx.asyncSubject();
-
-        //Then
-        Assert.assertTrue(true);
-    }
+//    @Test
+//    public void testAsyncSubject() throws InterruptedException {
+//        //Given
+//        //When
+//        SubjectRx.asyncSubject();
+//
+//        //Then
+//        Assert.assertTrue(true);
+//    }
 
     /**
      * BehaviorSubject
      * @throws InterruptedException
      */
-    @Test
-    public void testBehaviorSubject() throws InterruptedException {
-        //Given
-        //When
-        SubjectRx.behaviorSubject();
-
-        //Then
-        Assert.assertTrue(true);
-    }
+//    @Test
+//    public void testBehaviorSubject() throws InterruptedException {
+//        //Given
+//        //When
+//        SubjectRx.behaviorSubject();
+//
+//        //Then
+//        Assert.assertTrue(true);
+//    }
 
 
     /**
      * PublishSubject
      * @throws InterruptedException
      */
-    @Test
-    public void testPublishSubject() throws InterruptedException {
-        //Given
-        //When
-        SubjectRx.publishSubject();
-
-        //Then
-        Assert.assertTrue(true);
-    }
+//    @Test
+//    public void testPublishSubject() throws InterruptedException {
+//        //Given
+//        //When
+//        SubjectRx.publishSubject();
+//
+//        //Then
+//        Assert.assertTrue(true);
+//    }
 
     /**
      * ReplaySubject
