@@ -115,7 +115,7 @@ public class Conditional {
 	
 	/**
 	 * takeWhile
-	 * #조건에 맞을때까지 요소를 반환하고  조건이 틀리면 이후는 요소를 반환하지 않는다.
+	 * #조건에 맞을때까지 요소를 반환하고  조건이 틀리면 이후는 요소를 반환하지 않는다..
 	 * @param firstList
 	 * @param name
 	 */

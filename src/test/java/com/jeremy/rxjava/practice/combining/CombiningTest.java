@@ -56,4 +56,13 @@ public class CombiningTest {
 		
 		assertTrue(true);
 	}
+	
+	@Test
+	public void testSwitchOnNextPractice() throws Exception {
+		List<Person> persons = CombiningDummy.dummyPersons();
+		List<Monkey> monkeys = CombiningDummy.dummyMonkeys();
+		Combining.switchOnNext(persons, monkeys);
+		
+		assertTrue(true);
+	}
 }
