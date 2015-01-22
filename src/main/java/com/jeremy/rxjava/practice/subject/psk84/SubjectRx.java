@@ -1,8 +1,10 @@
 package com.jeremy.rxjava.practice.subject.psk84;
 
-import rx.Subscriber;
+import com.jeremy.rxjava.practice.subject.psk84.thread.*;
 import rx.subjects.AsyncSubject;
 import rx.subjects.BehaviorSubject;
+import rx.subjects.PublishSubject;
+import rx.subjects.ReplaySubject;
 
 /**
  * Created by psk84 on 15. 1. 20..
@@ -31,6 +33,8 @@ public class SubjectRx {
         AsyncSubjectThread1 asyncSubjectThread1 = new AsyncSubjectThread1(subject);
         AsyncSubjectThread2 asyncSubjectThread2 = new AsyncSubjectThread2(subject);
 
+        System.out.println("asyncSubjectThread1 Start!!!");
+        System.out.println("asyncSubjectThread2 Start!!!");
         asyncSubjectThread1.start();
         asyncSubjectThread2.start();
 
@@ -54,6 +58,8 @@ public class SubjectRx {
         AsyncSubjectThread1 asyncSubjectThread1 = new AsyncSubjectThread1(subject);
         AsyncSubjectThread2 asyncSubjectThread2 = new AsyncSubjectThread2(subject);
 
+        System.out.println("asyncSubjectThread1 Start!!!");
+        System.out.println("asyncSubjectThread2 Start!!!");
         asyncSubjectThread1.start();
         asyncSubjectThread2.start();
 
@@ -76,9 +82,9 @@ public class SubjectRx {
 
 
     /**
-     * behaviorSubject
+     * BehaviorSubject
      *
-     * 최초 추출에 의해 해당 Subject가 실행되며 subscriber호출 시점의 source Observable의 가장 최근 item을 추출 합니다.
+     * 스래드 개수에 상관없이  최초 추출에 의해 해당 Subject가 실행되며 subscriber호출 시점의 source Observable의 가장 최근 item을 추출 합니다.
      */
     public static void behaviorSubject() throws InterruptedException {
         System.out.println("=========================behaviorSubject() ========================");
@@ -89,8 +95,10 @@ public class SubjectRx {
 
         BehaviorSubjectThread1 behaviorSubjectThread1 = new BehaviorSubjectThread1(behaviorSubject);
         BehaviorSubjectThread2 behaviorSubjectThread2 = new BehaviorSubjectThread2(behaviorSubject);
-        behaviorSubjectThread1.start();
 
+        System.out.println("behaviorSubjectThread1 Start!!!");
+        System.out.println("behaviorSubjectThread2 Start!!!");
+        behaviorSubjectThread1.start();
         behaviorSubjectThread2.start();
 
         Thread.sleep(2000);
@@ -107,158 +115,77 @@ public class SubjectRx {
         behaviorSubject.onCompleted();
     }
 
+    /**
+     * PushlishSubject
+     *
+     * 스래드 갯수에 상관없이 PushlishSubject는 아이템을 subscribe후 모든 아이템이 추출되면 바로 종료됩니다.
+     * 아이템 추출 이후에는 다른스래드에서 해당아이테음을 사용할수없습니다.
+     * @throws InterruptedException
+     */
+    public static void publishSubject() throws InterruptedException{
+        System.out.println("=========================publishSubject() ========================");
 
+        PublishSubject<String> publishSubject = PublishSubject.create();
 
-    static class AsyncSubjectThread1 extends Thread{
-        private AsyncSubject<String> asyncSubject;
+        PublishSubjectThread1 publishSubjectThread1 = new PublishSubjectThread1(publishSubject);
+        PublishSubjectThread2 publishSubjectThread2 = new PublishSubjectThread2(publishSubject);
 
-        public AsyncSubjectThread1(AsyncSubject<String> asyncSubject){
-            this.asyncSubject = asyncSubject;
-        }
+        System.out.println("publishSubjectThread1 Start!!!");
+        publishSubjectThread1.start();
 
-        @Override
-        public void run() {
+        System.out.println("publishSubject onNext A!!!");
+        publishSubject.onNext("A");
 
-            while (true){
-                try {
-                    sleep(1000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
+        Thread.sleep(2000);
+        System.out.println("publishSubject onNext B!!!");
+        publishSubject.onNext("B");
 
-                System.out.println("AsyncSubjectThread1 Subscriber!!!");
-                asyncSubject.subscribe(new Subscriber<String>() {
-                    @Override
-                    public void onCompleted() {
-                        System.out.println("AsyncSubjectThread1 onComplete!!!");
-                    }
+        Thread.sleep(2000);
+        System.out.println("publishSubject onNext C!!!");
+        publishSubject.onNext("C");
 
-                    @Override
-                    public void onError(Throwable e) {
-                        System.out.println("AsyncSubjectThread1 onError!!!" + e.getMessage());
-                    }
+        System.out.println("publishSubjectThread2 Start!!!");
+        publishSubjectThread2.start();
 
-                    @Override
-                    public void onNext(String s) {
-                        System.out.println("AsyncSubjectThread1 onNext!!!" + s);
-                    }
-                });
-            }
-        }
-    }
-
-    static class AsyncSubjectThread2 extends Thread{
-        private AsyncSubject<String> asyncSubject;
-
-        public AsyncSubjectThread2(AsyncSubject<String> asyncSubject){
-            this.asyncSubject = asyncSubject;
-        }
-
-        @Override
-        public void run() {
-
-            while (true){
-
-                try {
-                    sleep(2000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-
-                System.out.println("AsyncSubjectThread2 Subscriber!!!");
-                asyncSubject.subscribe(new Subscriber<String>() {
-                    @Override
-                    public void onCompleted() {
-                        System.out.println("AsyncSubjectThread2 onComplete!!!");
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        System.out.println("AsyncSubjectThread2 onError!!!" + e.getMessage());
-                    }
-
-                    @Override
-                    public void onNext(String s) {
-                        System.out.println("AsyncSubjectThread2 onNext!!!" + s);
-                    }
-                });
-            }
-        }
+        Thread.sleep(2000);
+        System.out.println("publishSubject onNext D!!!");
+        publishSubject.onNext("D");
     }
 
 
-    static class BehaviorSubjectThread1 extends Thread{
-        private BehaviorSubject<String> behaviorSubject;
+    /**
+     * ReplaySubject
+     *
+     * 특정 스레드에서 replaySubject에 대한 subscribe를 호출시 Source Object의 기존 아이템까지 같이 추출된다.
+     * @throws InterruptedException
+     */
+    public static void replaySubject() throws InterruptedException{
+        System.out.println("=========================replaySubject() ========================");
 
-        public BehaviorSubjectThread1(BehaviorSubject<String> behaviorSubject){
-            this.behaviorSubject = behaviorSubject;
-        }
+        ReplaySubject<String> replaySubject = ReplaySubject.create();
 
-        @Override
-        public void run() {
-            while(true){
-                try {
-                    sleep(1000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
+        ReplaySubjectThread1 replaySubjectThread1 = new ReplaySubjectThread1(replaySubject);
+        ReplaySubjectThread2 replaySubjectThread2 = new ReplaySubjectThread2(replaySubject);
 
-                System.out.println("BehaviorSubjectThread1 Subscriber!!!");
-                behaviorSubject.subscribe(new Subscriber<String>() {
-                    @Override
-                    public void onCompleted() {
-                        System.out.println("BehaviorSubjectThread1 onComplete!!!");
-                    }
+        System.out.println("ReplaySubjectThread1 Start!!!");
+        replaySubjectThread1.start();
 
-                    @Override
-                    public void onError(Throwable e) {
-                        System.out.println("BehaviorSubjectThread1 onError!!!" + e.getMessage());
-                    }
+        System.out.println("replaySubject onNext A!!!");
+        replaySubject.onNext("A");
 
-                    @Override
-                    public void onNext(String s) {
-                        System.out.println("BehaviorSubjectThread1 onNext!!!" + s);
-                    }
-                });
-            }
-        }
-    }
+        Thread.sleep(2000);
+        System.out.println("replaySubject onNext B!!!");
+        replaySubject.onNext("B");
 
-    static class BehaviorSubjectThread2 extends Thread{
-        private BehaviorSubject<String> behaviorSubject;
+        Thread.sleep(2000);
+        System.out.println("replaySubject onNext C!!!");
+        replaySubject.onNext("C");
 
-        public BehaviorSubjectThread2(BehaviorSubject<String> behaviorSubject){
-            this.behaviorSubject = behaviorSubject;
-        }
+        System.out.println("ReplaySubjectThread2 Start!!!");
+        replaySubjectThread2.start();
 
-        @Override
-        public void run() {
-
-            while(true){
-                try {
-                    sleep(2000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-
-                System.out.println("BehaviorSubjectThread2 Subscriber!!!");
-                behaviorSubject.subscribe(new Subscriber<String>() {
-                    @Override
-                    public void onCompleted() {
-                        System.out.println("BehaviorSubjectThread2 onComplete!!!");
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        System.out.println("BehaviorSubjectThread2 onError!!!" + e.getMessage());
-                    }
-
-                    @Override
-                    public void onNext(String s) {
-                        System.out.println("BehaviorSubjectThread2 onNext!!!" + s);
-                    }
-                });
-            }
-        }
+        Thread.sleep(2000);
+        System.out.println("replaySubject onNext D!!!");
+        replaySubject.onNext("D");
     }
 }

@@ -49,4 +49,33 @@ public class SubjectTest {
         //Then
         Assert.assertTrue(true);
     }
+
+
+    /**
+     * PublishSubject
+     * @throws InterruptedException
+     */
+    @Test
+    public void testPublishSubject() throws InterruptedException {
+        //Given
+        //When
+        SubjectRx.publishSubject();
+
+        //Then
+        Assert.assertTrue(true);
+    }
+
+    /**
+     * ReplaySubject
+     * @throws InterruptedException
+     */
+    @Test
+    public void testReplaySubject() throws InterruptedException {
+        //Given
+        //When
+        SubjectRx.replaySubject();
+
+        //Then
+        Assert.assertTrue(true);
+    }
 }
