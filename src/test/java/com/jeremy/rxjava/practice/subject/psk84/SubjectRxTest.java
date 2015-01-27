@@ -9,7 +9,7 @@ import org.junit.Test;
 public class SubjectRxTest {
 
     @Test
-    public void testAsyncSubjectEmpty(){
+    public void testAsyncSubjectEmpty() throws InterruptedException {
         //Given
         //When
         SubjectRx.asyncSubjectEmpty();
@@ -19,7 +19,7 @@ public class SubjectRxTest {
     }
 
     @Test
-    public void testAsyncSubject(){
+    public void testAsyncSubject() throws InterruptedException {
         //Given
         //When
         SubjectRx.asyncSubject();
@@ -29,7 +29,7 @@ public class SubjectRxTest {
     }
 
     @Test
-    public void testBehaviorSubject(){
+    public void testBehaviorSubject() throws InterruptedException {
         //Given
         //When
         SubjectRx.behaviorSubject();

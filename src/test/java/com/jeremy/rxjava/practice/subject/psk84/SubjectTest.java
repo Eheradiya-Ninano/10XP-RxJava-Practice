@@ -26,15 +26,15 @@ public class SubjectTest {
      * AsyncSubject Test Main
      * @throws InterruptedException
      */
-    @Test
-    public void testAsyncSubject() throws InterruptedException {
-        //Given
-        //When
-        SubjectRx.asyncSubject();
-
-        //Then
-        Assert.assertTrue(true);
-    }
+//    @Test
+//    public void testAsyncSubject() throws InterruptedException {
+//        //Given
+//        //When
+//        SubjectRx.asyncSubject();
+//
+//        //Then
+//        Assert.assertTrue(true);
+//    }
 
     /**
      * BehaviorSubject
@@ -69,13 +69,13 @@ public class SubjectTest {
      * ReplaySubject
      * @throws InterruptedException
      */
-//    @Test
-//    public void testReplaySubject() throws InterruptedException {
-//        //Given
-//        //When
-//        SubjectRx.replaySubject();
-//
-//        //Then
-//        Assert.assertTrue(true);
-//    }
+    @Test
+    public void testReplaySubject() throws InterruptedException {
+        //Given
+        //When
+        SubjectRx.replaySubject();
+
+        //Then
+        Assert.assertTrue(true);
+    }
 }
